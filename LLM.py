@@ -72,10 +72,3 @@ if __name__ == '__main__':
 
     except ValueError as e:
         print(e)
-
-
->>>
---- 调用LLM ---
-🧠 正在调用 xxxxxx 模型...
-✅ 大语言模型响应成功:
-快速排序是一种非常高效的排序算法...
