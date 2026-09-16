@@ -72,7 +72,7 @@ class ReActAgent:
             # 4. 执行Action
             if action.startswith("Finish"):
                 # 如果是Finish指令，提取最终答案并结束
-                final_answer = re.match(r"Finish\[(.*)\]", action).group(1)
+                final_answer = re.match(r"Finish\[(.*)\]", action, re.DOTALL).group(1)
                 print(f"🎉 最终答案: {final_answer}")
                 return final_answer
             

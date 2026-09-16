@@ -1,3 +1,4 @@
+import os
 from serpapi import SerpApiClient
 
 def search(query: str) -> str:

@@ -1,33 +1,30 @@
-# --- 工具初始化与使用示例 ---
-from tools.ToolExecutor import ToolExecutor
-from tools.search import search
+# --- 组装并运行完整的 ReAct 智能体 ---
+from ToolExecutor import ToolExecutor
+from search import search
+from LLM import HelloAgentsLLM
+from ReActAgent import ReActAgent
 
 
 if __name__ == '__main__':
-    # 1. 初始化工具执行器
+    # 1. 初始化工具执行器，并注册实战搜索工具
     toolExecutor = ToolExecutor()
-
-    # 2. 注册我们的实战搜索工具
     search_description = "一个网页搜索引擎。当你需要回答关于时事、事实以及在你的知识库中找不到的信息时，应使用此工具。"
     toolExecutor.registerTool("Search", search_description, search)
-    
-    # 3. 打印可用的工具
+
     print("\n--- 可用的工具 ---")
     print(toolExecutor.getAvailableTools())
 
-    # 4. 智能体的Action调用，这次我们问一个实时性的问题
-    print("\n--- 执行 Action: Search['英伟达最新的GPU型号是什么'] ---")
-    tool_name = "Search"
-    tool_input = "英伟达最新的GPU型号是什么"
+    # 2. 初始化LLM客户端与ReAct智能体
+    llm = HelloAgentsLLM()
+    agent = ReActAgent(llm_client=llm, tool_executor=toolExecutor)
 
-    tool_function = toolExecutor.getTool(tool_name)
-    if tool_function:
-        observation = tool_function(tool_input)
-        print("--- 观察 (Observation) ---")
-        print(observation)
-    else:
-        print(f"错误:未找到名为 '{tool_name}' 的工具。")
-        
+    # 3. 提出一个需要实时信息的问题，跑完整的 Thought/Action/Observation 循环
+    question = "英伟达最新的GPU型号是什么"
+    print(f"\n--- 提问: {question} ---")
+    answer = agent.run(question)
+    print(f"\n--- 最终结果 ---\n{answer}")
+
+# 以下是旧版手动调用 Search 工具（不经过LLM/ReAct循环）时的示例输出，保留作参考：
 # >>>
 # 工具 'Search' 已注册。
 
